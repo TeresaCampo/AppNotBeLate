@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewEventFragment">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Hi!\nNew event for today...tell me more!"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.068" />
+
+    <fragment
+        android:id="@+id/ac_meeting_point"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="340dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout="@layout/fragment_dropdown_element"></fragment>
+
+    <fragment
+        android:id="@+id/ac_leaving_point"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="340dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ac_meeting_point"
+        tools:layout="@layout/fragment_dropdown_element"></fragment>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ti_meansOfTransport"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="320dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ac_leaving_point">
+
+        <AutoCompleteTextView
+            android:id="@+id/auto_complete_txtView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="@string/mean_of_transport"
+            android:inputType="none"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:text="Where is the leaving point?"
+        app:layout_constraintBottom_toTopOf="@+id/ac_leaving_point"
+        app:layout_constraintStart_toStartOf="@+id/ac_leaving_point" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:text="Where is the meeting point?"
+        app:layout_constraintBottom_toTopOf="@+id/ac_meeting_point"
+        app:layout_constraintStart_toStartOf="@+id/ac_meeting_point" />
+
+    <Button
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_timeToPark"
+        android:layout_width="318dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:text="Let me know how much time you think you will need to park there"
+        android:visibility="gone"
+
+        app:layout_constraintStart_toStartOf="@+id/ti_meansOfTransport"
+        app:layout_constraintTop_toBottomOf="@+id/ti_meansOfTransport" />
+
+    <EditText
+        android:id="@+id/te_minutes"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="1dp"
+        android:ems="10"
+        android:hint="Minutes"
+        android:visibility="gone"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/te_hour"
+        app:layout_constraintTop_toBottomOf="@+id/tv_timeToPark" />
+
+    <EditText
+        android:id="@+id/te_hour"
+        android:layout_width="60dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="Hour"
+        android:visibility="gone"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="@+id/tv_timeToPark"
+        app:layout_constraintTop_toBottomOf="@+id/tv_timeToPark" />
+
+    <TextView
+        android:id="@+id/tv_leavingPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:text="Leaving point"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintEnd_toStartOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tv_meetingPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="Meeting point"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintStart_toEndOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:text="- - - - - - - - - - - - - - >"
+        app:layout_constraintBottom_toTopOf="@+id/nextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_travelTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Travel time"
+        app:layout_constraintBottom_toTopOf="@+id/textView12"
+        app:layout_constraintEnd_toEndOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="@+id/textView12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
