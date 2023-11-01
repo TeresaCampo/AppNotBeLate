@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">AppNotBeLate</string>
-    <string name="apiKey">AIzaSyB7CeAApzLzRR7E2PHZBTOKks_AoGpUpZ0</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="select">Means of transport to reach it?</string>
     <string name="mean_of_transport">Mean of transport to reach it?</string>
