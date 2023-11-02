@@ -59,7 +59,6 @@
             android:id="@+id/auto_complete_txtView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="@string/mean_of_transport"
             android:inputType="none"
             tools:ignore="SpeakableTextPresentCheck" />
 
@@ -73,6 +72,14 @@
         android:text="Where is the leaving point?"
         app:layout_constraintBottom_toTopOf="@+id/ac_leaving_point"
         app:layout_constraintStart_toStartOf="@+id/ac_leaving_point" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mean of transport to reach it?"
+        app:layout_constraintBottom_toTopOf="@+id/ti_meansOfTransport"
+        app:layout_constraintStart_toStartOf="@+id/ti_meansOfTransport" />
 
     <TextView
         android:id="@+id/textView3"
@@ -100,33 +107,9 @@
         android:layout_height="40dp"
         android:layout_marginTop="32dp"
         android:text="Let me know how much time you think you will need to park there"
-        android:visibility="gone"
-
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/ti_meansOfTransport"
         app:layout_constraintTop_toBottomOf="@+id/ti_meansOfTransport" />
-
-    <EditText
-        android:id="@+id/te_minutes"
-        android:layout_width="60dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="1dp"
-        android:ems="10"
-        android:hint="Minutes"
-        android:visibility="gone"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/te_hour"
-        app:layout_constraintTop_toBottomOf="@+id/tv_timeToPark" />
-
-    <EditText
-        android:id="@+id/te_hour"
-        android:layout_width="60dp"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:hint="Hour"
-        android:visibility="gone"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="@+id/tv_timeToPark"
-        app:layout_constraintTop_toBottomOf="@+id/tv_timeToPark" />
 
     <TextView
         android:id="@+id/tv_leavingPoint"
@@ -151,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
-        android:text="- - - - - - - - - - - - - - >"
+        android:text="- - - - - - - - - - >"
         app:layout_constraintBottom_toTopOf="@+id/nextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -164,5 +147,14 @@
         app:layout_constraintBottom_toTopOf="@+id/textView12"
         app:layout_constraintEnd_toEndOf="@+id/textView12"
         app:layout_constraintStart_toStartOf="@+id/textView12" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentTimePicker"
+        android:name="com.teresa.appnotbelate.TimePickerFragment"
+        android:layout_width="140dp"
+        android:layout_height="48dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/tv_timeToPark"
+        app:layout_constraintTop_toBottomOf="@+id/tv_timeToPark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
