@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.maps.DirectionsApi;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -25,75 +22,108 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.TravelMode;
-
 import java.util.Arrays;
+import java.util.Calendar;
 
-public class NewEventFragment extends Fragment {
+
+public class NewEventFragment extends Fragment implements TimePickerFragment.DurationChangeListener {
+    View v;
     GeoApiContext geoApiContext;
     String[] dropdownElements= {"By foot", "By car"};
-    private OnFragmentInteractionListener mListener;
-    String selectedMeanOfTransport;
-    TextView tv_timeToPark;
-    TimePickerFragment timePicker;
+    private CommunicationActivityFragments communicationListener;
+    TextView tv_isTomorrow, tv_travelTime, tv_meetingPoint, tv_leavingPoint;
+    TimePickerFragment meetingTime;
+    TimeFormatter travelTime;
     AutocompleteSupportFragment acb_meetingPoint, acb_leavingPoint;
     Place origin, destination;
     AutoCompleteTextView ac_meansOfTransport;
-    TextView tv_travelTime, tv_meetingPoint, tv_leavingPoint;
+    Button nextButton;
+    Boolean isTomorrow=false;
 
-
-    public NewEventFragment() {
-        // Required empty public constructor
-    }
-
-    /*@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_new_event, container, false);
-        //Set class variables of components that we are goigng to set visible or gone according to the mean of transport
-        tv_timeToPark= v.findViewById(R.id.tv_timeToPark);
-        timePicker=(TimePickerFragment) getChildFragmentManager().findFragmentById(R.id.fragmentTimePicker);
+        v= inflater.inflate(R.layout.fragment_new_event, container, false);
 
-        tv_meetingPoint=v.findViewById(R.id.tv_meetingPoint);
+        //Components that I have to work on
         tv_travelTime=v.findViewById(R.id.tv_travelTime);
-        tv_leavingPoint=v.findViewById(R.id.tv_leavingPoint);
+        tv_isTomorrow=v.findViewById(R.id.tv_isTomorrow);
 
-        //Autocomplete bar for meeting point
+        //Create autocomplete bar for leaving and meeting point
+        createAutocompleteBarMeetingPoint();
+        createAutocompleteBarLeavingPoint();
+
+        //Create dropDown menu with means of transport
+        createDropDownMenu();
+
+        //Create "next" button
+        nextButton= v.findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (communicationListener != null) {
+                    //check if all the field are compiled
+                    if(origin== null || destination==null) {
+                        Toast.makeText(getContext(), "Please, insert all the data", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String meanOfTransport= String.valueOf(ac_meansOfTransport.getText());
+                    if(meanOfTransport.equals("By car")){
+                        communicationListener.onCommunicateNewEvent(origin, destination,meetingTime.getTime(), false, travelTime );
+                        communicationListener.onChangeFragment(2);
+                    }
+                    else {
+                        communicationListener.onCommunicateNewEvent(origin, destination, meetingTime.getTime(), true, travelTime );
+                        communicationListener.onChangeFragment(3);
+                    }
+                }
+            }
+        });
+        //Initialize meetingTime
+        meetingTime = new TimePickerFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTime).commit();
+        meetingTime.setCurrentTime();
+        meetingTime.durationChangeListener=this;
+
+        //Initialize Class to calculate time distance between two places
+        geoApiContext = new GeoApiContext.Builder()
+                .apiKey(getResources().getString(R.string.apiKey))
+                .build();
+
+        return v;
+    }
+
+    /**
+     * Create a drop down menu for to choose the mean of transport
+     */
+    private void createDropDownMenu(){
+        //Components I need
+        ac_meansOfTransport= v.findViewById(R.id.auto_complete_txtView);
+
+        ArrayAdapter<String> adapterDropdownMenu= new ArrayAdapter<>(this.getContext(), R.layout.fragment_dropdown_element, dropdownElements);
+        ac_meansOfTransport.setAdapter(adapterDropdownMenu);
+        ac_meansOfTransport.setHint("By foot"); //default value
+        ac_meansOfTransport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkTimeDistance();
+            }
+        });
+    }
+    /**
+     * Create an Google autocomplete bar to choose the meeting point
+     */
+    private void createAutocompleteBarMeetingPoint(){
+        //Components I need
+        tv_meetingPoint=v.findViewById(R.id.tv_meetingPoint);
+
         acb_meetingPoint= (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.ac_meeting_point);
         if (acb_meetingPoint != null) {
             acb_meetingPoint.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS)); //what you get from google maps, we only eed the Place name
-            acb_meetingPoint.setHint("A public place,address of an house,...");
+            acb_meetingPoint.setHint("Place you need to go");
             acb_meetingPoint.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(@NonNull Place place) {
-                    origin=place;
-                    tv_leavingPoint.setText(origin.getName());
-                    checkTimeDistance();
-                }
-                @Override
-                public void onError(@NonNull Status status) {
-                    origin=null;
-                    tv_leavingPoint.setText("Leaving point");
-                }
-            });
-        }
-        else{
-            Log.d("TAG", "Il frammento era nullo");
-        }
-
-        //Autocomplete bar for leaving point
-        acb_leavingPoint= (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.ac_leaving_point);
-        if (acb_leavingPoint != null) {
-            acb_leavingPoint.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS)); //what you get from google maps, correct it
-            acb_leavingPoint.setHint("Your house,a public place,...");
-            acb_leavingPoint.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
                     destination=place;
@@ -110,65 +140,54 @@ public class NewEventFragment extends Fragment {
         else{
             Log.d("TAG", "Il frammento era nullo");
         }
+    }
+    /**
+     * Create an Google autocomplete bar to choose the leaving point
+     */
+    private void createAutocompleteBarLeavingPoint(){
+        //Components I need
+        tv_leavingPoint=v.findViewById(R.id.tv_leavingPoint);
 
-        //dropDown menu means of transport and visibility of tv_timeToPark,te_hour,te_minutes
-        ac_meansOfTransport= v.findViewById(R.id.auto_complete_txtView);
-        ArrayAdapter<String> adapterDropdownMenu= new ArrayAdapter<>(this.getContext(), R.layout.fragment_dropdown_element, dropdownElements);
-        ac_meansOfTransport.setAdapter(adapterDropdownMenu);
-        ac_meansOfTransport.setHint("By foot"); //defualt value
-        ac_meansOfTransport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedMeanOfTransport= parent.getItemAtPosition(position).toString();
-                if(selectedMeanOfTransport.equals("By car")){
-                    tv_timeToPark.setVisibility(View.VISIBLE);
+        acb_leavingPoint= (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.ac_leaving_point);
+        if (acb_leavingPoint != null) {
+            acb_leavingPoint.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS)); //what you get from google maps, correct it
+            acb_leavingPoint.setHint("Place you are leaving from");
+            acb_leavingPoint.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    origin=place;
+                    tv_leavingPoint.setText(origin.getName());
+                    checkTimeDistance();
                 }
-                else{
-                    tv_timeToPark.setVisibility(View.INVISIBLE);
-                    timePicker.getView().setVisibility(View.INVISIBLE);
+                @Override
+                public void onError(@NonNull Status status) {
+                    origin=null;
+                    tv_leavingPoint.setText("Leaving point");
                 }
-                checkTimeDistance();
-            }
-        });
-
-        //Button "next"
-        Button nextButton= v.findViewById(R.id.nextButton);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onFragmentInteraction();
-                }
-
-            }
-        });
-        //Initialize Class to calculate time distance between two places
-        geoApiContext = new GeoApiContext.Builder()
-                .apiKey(getResources().getString(R.string.apiKey))
-                .build();
-
-        return v;
+            });
+        }
+        else{
+            Log.d("TAG", "Il frammento era nullo");
+        }
     }
 
     /**
      * Check if both originPlace and destinationPlace are set
      * If so, calculates the time distance and return it
-     *
      */
     private void checkTimeDistance(){
-        String meanOfTransport= String.valueOf(ac_meansOfTransport.getText());
+        //Check the travel mode
         String travelMode;
+        String meanOfTransport= String.valueOf(ac_meansOfTransport.getText());
         if(meanOfTransport.equals("By car")){
             travelMode="DRIVING";
         }
         else{
             travelMode="WALKING";
         }
-        Toast.makeText(getContext(), "Mean of transport:"+ travelMode, Toast.LENGTH_SHORT).show();
-        //check if both Places field contain a place
+        //Check if both origin and destination contain a place
         if(origin!=null && destination!=null){
             try {
-                Toast.makeText(getContext(), "Both source and destination are not null", Toast.LENGTH_SHORT).show();
                 DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
                         .origin(origin.getAddress())
                         .destination(destination.getAddress())
@@ -176,10 +195,9 @@ public class NewEventFragment extends Fragment {
                         .await();
 
                 // Access the distance and duration from the result
-                //String distance = result.routes[0].legs[0].distance.humanReadable;
-                String duration = result.routes[0].legs[0].duration.humanReadable;
-                tv_travelTime.setText(duration);
-                Toast.makeText(getContext(), "Distance calculated", Toast.LENGTH_SHORT).show();
+                com.google.maps.model.Duration duration = result.routes[0].legs[0].duration;
+                travelTime=new TimeFormatter(duration);
+                tv_travelTime.setText(travelTime.toString());
             } catch (Exception e) {
                 Log.d("TAG", e.toString());
                 Toast.makeText(getContext(), "Exception"+ e, Toast.LENGTH_SHORT).show();
@@ -189,35 +207,44 @@ public class NewEventFragment extends Fragment {
             tv_travelTime.setText("Travel time");
         }
     }
-    /*
-    public static class AutocompleteBarPlaceSelectionListener implements PlaceSelectionListener{
-        @Override
-        public void onError(@NonNull Status status) {
-            Log.i(TAG, "An error occurred: " + status);
-        }
 
-        @Override
-        public void onPlaceSelected(@NonNull Place place) {
-
-            Log.i(TAG, "Place: " + place.getName());
-        }
-    }
-
+    /**
+     * To set the communicationListener to communicate with MainActivity
+     * @param context
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction();
-    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof CommunicationActivityFragments) {
+            communicationListener = (CommunicationActivityFragments) context;
         } else {
-            throw new ClassCastException(context.toString() + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(context + " must implement CommunicationActivityFragments");
         }
     }
+    /**
+     * To update isTomorrow when the meetingTime changes
+     * @param newTime new time
+     */
+    @Override
+    public void onDurationChanged(TimeFormatter newTime) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        if(newTime.getHours()<hour){
+            isTomorrow=true;
+        }
+        else if(newTime.getHours()==hour && newTime.getMinutes()<=minute){
+            isTomorrow=true;
+        }
+        else{
+            isTomorrow=false;
+        }
 
-
-
-
+        if(isTomorrow==true) {
+            tv_isTomorrow.setVisibility(View.VISIBLE);
+        }
+        else{
+            tv_isTomorrow.setVisibility(View.INVISIBLE);
+        }
+    }
 }

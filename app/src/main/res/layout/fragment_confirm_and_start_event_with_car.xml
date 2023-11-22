@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConfirmAndStartEventWithCar">
+
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:text="Ok, this is your schedule"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_getReady"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="129dp"
+        android:text="Start to get ready"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/tv_leaveAndCar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="80dp"
+        android:text="Leave the house and reach the car:"
+        app:layout_constraintStart_toStartOf="@+id/tv_getReady"
+        app:layout_constraintTop_toBottomOf="@+id/tv_getReady" />
+
+    <TextView
+        android:id="@+id/tv_leave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Start the car"
+        app:layout_constraintStart_toStartOf="@+id/tv_leaveAndCar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_leaveAndCar" />
+
+    <TextView
+        android:id="@+id/tv_park"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:text="Start to find the park"
+        app:layout_constraintStart_toStartOf="@+id/tv_leave"
+        app:layout_constraintTop_toBottomOf="@+id/tv_leave" />
+
+    <TextView
+        android:id="@+id/tv_arrived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:text="Arrived"
+        app:layout_constraintStart_toStartOf="@+id/tv_park"
+        app:layout_constraintTop_toBottomOf="@+id/tv_park" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="124dp"
+        android:layout_height="709dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/timeschedule"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="77dp"
+        android:layout_height="47dp"
+        android:text="Time to get ready:"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_leaveAndCar"
+        app:layout_constraintStart_toStartOf="@+id/textView15"
+        app:layout_constraintTop_toTopOf="@+id/tv_getReady" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="108dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
+        android:text="Time to reach the car:"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_leave"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_leaveAndCar"
+        app:layout_constraintVertical_bias="0.604" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="77dp"
+        android:layout_height="48dp"
+        android:text="Time to get there:"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_park"
+        app:layout_constraintStart_toStartOf="@+id/textView15"
+        app:layout_constraintTop_toTopOf="@+id/tv_leave" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="73dp"
+        android:layout_height="48dp"
+        android:text="Time to park:"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_arrived"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/tv_park" />
+
+
+    <TextView
+        android:id="@+id/tv_timeGetReady"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_getReady"
+        app:layout_constraintStart_toStartOf="@+id/tv_getReady" />
+
+    <TextView
+        android:id="@+id/tv_timeLeave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_leaveAndCar"
+        app:layout_constraintStart_toStartOf="@+id/tv_leaveAndCar" />
+
+    <TextView
+        android:id="@+id/tv_timeStartCar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_leave"
+        app:layout_constraintStart_toStartOf="@+id/tv_leave" />
+
+    <TextView
+        android:id="@+id/tv_timePark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_park"
+        app:layout_constraintStart_toStartOf="@+id/tv_park" />
+
+    <TextView
+        android:id="@+id/tv_timeArrived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_arrived"
+        app:layout_constraintStart_toStartOf="@+id/tv_arrived" />
+
+    <Button
+        android:id="@+id/bn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginBottom="36dp"
+        android:text="back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/setAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="36dp"
+        android:text="set the alarm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

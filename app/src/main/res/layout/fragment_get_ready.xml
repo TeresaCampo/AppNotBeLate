@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GetReadyFragment">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Ok, insert last details..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="183dp"
+        android:text="How much time to get ready?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <FrameLayout
+        android:id="@+id/firstReadyTime"
+        android:layout_width="133dp"
+        android:layout_height="62dp"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+
+    <TextView
+        android:id="@+id/tv_areYouSure"
+        android:layout_width="336dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="32dp"
+        android:text="Are you sure that you will actually leave the starting point in tot minutes?\nLet's consider some minutes to find the keys, to choose the shoes..\n\nSo again...how much time to get ready?"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/firstReadyTime"
+        app:layout_constraintTop_toBottomOf="@+id/firstReadyTime" />
+
+
+    <FrameLayout
+        android:id="@+id/secondReadyTime"
+        android:layout_width="133dp"
+        android:layout_height="62dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_areYouSure"
+        app:layout_constraintTop_toBottomOf="@+id/tv_areYouSure" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="88dp"
+        android:layout_marginBottom="36dp"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginBottom="32dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
