@@ -1,14 +1,9 @@
-package com.teresa.appnotbelate;
+package com.teresa.appnotbelate.Components;
 
 import static com.android.volley.VolleyLog.TAG;
 
-import android.content.Context;
-import android.database.Observable;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -18,7 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 
-import java.time.LocalTime;
+import com.teresa.appnotbelate.R;
+
 import java.util.Calendar;
 
 /**
@@ -179,6 +175,21 @@ public class TimePickerFragment extends Fragment {
         }, 100); // 100 milliseconds delay
     }
 
+    public void setSameTime(TimeFormatter frag){
+        //handler to force the UI to update the NumberPicker graphic content
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                time.setHours((int) frag.getHours());
+                time.setMinutes((int) frag.getMinutes());
+
+                setEn_hour((int) frag.getHours());
+                setEn_minutes((int) frag.getMinutes());
+            }
+        }, 100); // 100 milliseconds delay
+    }
+
+
     //getter and setter
     public int getEn_hour() {
         return en_hour.getValue();
@@ -198,5 +209,14 @@ public class TimePickerFragment extends Fragment {
 
     public TimeFormatter getTime() {
         return time;
+    }
+
+    public DurationChangeListener getDurationChangeListener() {
+        return durationChangeListener;
+    }
+
+    public void setDurationChangeListener(DurationChangeListener durationChangeListener) {
+        this.durationChangeListener = durationChangeListener;
+
     }
 }

@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewEventFragment">
+    tools:context=".newEventSetting.NewEventFragment">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="361dp"
         android:layout_height="71dp"
         android:gravity="center"
-        android:text="Hi! Let's plan a new event...\nLet's start telling me some information about the leaving and meeting point"
+        android:text="Hi! Let's plan a new event..."
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintHorizontal_bias="0.68"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <fragment
         android:id="@+id/ac_meeting_point"
@@ -35,30 +35,21 @@
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="340dp"
         android:layout_height="48dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:layout="@layout/fragment_dropdown_element"></fragment>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ti_meansOfTransport"
+    <FrameLayout
+        android:id="@+id/ac_meansOfTransport"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="320dp"
-        android:layout_height="56dp"
+        android:layout_width="322dp"
+        android:layout_height="93dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="@+id/frg_meetingTime"
-        app:layout_constraintTop_toBottomOf="@+id/frg_meetingTime">
-
-        <AutoCompleteTextView
-            android:id="@+id/auto_complete_txtView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:inputType="none"
-            tools:ignore="SpeakableTextPresentCheck" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@+id/frg_meetingTime"></FrameLayout>
 
     <TextView
         android:id="@+id/textView2"
@@ -75,8 +66,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mean of transport to reach the meeting point?"
-        app:layout_constraintBottom_toTopOf="@+id/ti_meansOfTransport"
-        app:layout_constraintStart_toStartOf="@+id/ti_meansOfTransport" />
+        app:layout_constraintBottom_toTopOf="@+id/ac_meansOfTransport"
+        app:layout_constraintStart_toStartOf="@+id/ac_meansOfTransport" />
 
     <TextView
         android:id="@+id/textView3"
@@ -109,19 +100,21 @@
 
     <TextView
         android:id="@+id/tv_leavingPoint"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="2dp"
         android:text="Leaving point"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/textView12"
         app:layout_constraintEnd_toStartOf="@+id/textView12" />
 
     <TextView
         android:id="@+id/tv_meetingPoint"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:text="Meeting point"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/textView12"
         app:layout_constraintStart_toEndOf="@+id/textView12" />
 
@@ -129,10 +122,11 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="80dp"
         android:text="- - - - - - - - - - >"
         app:layout_constraintBottom_toTopOf="@+id/nextButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -157,12 +151,23 @@
         android:id="@+id/tv_isTomorrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
         android:text="Tomorrow"
-        android:visibility="invisible"
         android:textColor="#F44336"
-        app:layout_constraintBottom_toBottomOf="@+id/frg_meetingTime"
-        app:layout_constraintStart_toEndOf="@+id/frg_meetingTime"
-        app:layout_constraintTop_toTopOf="@+id/frg_meetingTime" />
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/tv_meetingPoint"
+        app:layout_constraintStart_toEndOf="@+id/tv_leavingPoint"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="287dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#F44336"
+        android:textColorHint="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/tv_isTomorrow"
+        app:layout_constraintStart_toStartOf="@+id/tv_isTomorrow"
+        app:layout_constraintTop_toBottomOf="@+id/tv_isTomorrow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

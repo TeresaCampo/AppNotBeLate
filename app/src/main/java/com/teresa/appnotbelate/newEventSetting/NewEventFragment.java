@@ -1,16 +1,19 @@
-package com.teresa.appnotbelate;
+package com.teresa.appnotbelate.newEventSetting;
+
+import static android.util.Log.DEBUG;
+import static com.android.volley.VolleyLog.TAG;
 
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,12 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.TravelMode;
+import com.teresa.appnotbelate.CommunicationActivityFragments;
+import com.teresa.appnotbelate.Components.DropDownMenu;
+import com.teresa.appnotbelate.R;
+import com.teresa.appnotbelate.Components.TimeFormatter;
+import com.teresa.appnotbelate.Components.TimePickerFragment;
+
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -31,32 +40,48 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
     GeoApiContext geoApiContext;
     String[] dropdownElements= {"By foot", "By car"};
     private CommunicationActivityFragments communicationListener;
-    TextView tv_isTomorrow, tv_travelTime, tv_meetingPoint, tv_leavingPoint;
-    TimePickerFragment meetingTime;
-    TimeFormatter travelTime;
+    TextView tv_isTomorrow, tv_travelTime, tv_meetingPoint, tv_leavingPoint, tv_message;
+    TimePickerFragment meetingTimeFrag;
+    TimeFormatter travelTime, leavingTime, meetingTime;
+    DropDownMenu ac_meansOftransport;
     AutocompleteSupportFragment acb_meetingPoint, acb_leavingPoint;
     Place origin, destination;
-    AutoCompleteTextView ac_meansOfTransport;
     Button nextButton;
     Boolean isTomorrow=false;
+    Boolean byFoot=true;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.println(DEBUG,TAG,"origin place is "+origin);
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_new_event, container, false);
 
         //Components that I have to work on
         tv_travelTime=v.findViewById(R.id.tv_travelTime);
         tv_isTomorrow=v.findViewById(R.id.tv_isTomorrow);
+        tv_message=v.findViewById(R.id.tv_message);
 
         //Create autocomplete bar for leaving and meeting point
         createAutocompleteBarMeetingPoint();
-        createAutocompleteBarLeavingPoint();
 
+        createAutocompleteBarLeavingPoint();
+        
         //Create dropDown menu with means of transport
         createDropDownMenu();
+
+        //Initialize meetingTimeFrag
+        if(meetingTimeFrag==null) {
+            meetingTimeFrag = new TimePickerFragment();
+            meetingTimeFrag.setCurrentTime();
+            meetingTime= meetingTimeFrag.getTime();
+            meetingTimeFrag.setDurationChangeListener(this);
+        }
+        else{
+            meetingTimeFrag.setSameTime(meetingTime);
+        }
+        getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTimeFrag).commit();
 
         //Create "next" button
         nextButton= v.findViewById(R.id.nextButton);
@@ -69,24 +94,18 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                         Toast.makeText(getContext(), "Please, insert all the data", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    String meanOfTransport= String.valueOf(ac_meansOfTransport.getText());
-                    if(meanOfTransport.equals("By car")){
-                        communicationListener.onCommunicateNewEvent(origin, destination,meetingTime.getTime(), false, travelTime );
+                    communicationListener.onCommunicateNewEvent(origin, destination,meetingTimeFrag.getTime(), byFoot, travelTime,leavingTime, isTomorrow );
+
+                    if(byFoot==false){
                         communicationListener.onChangeFragment(2);
                     }
                     else {
-                        communicationListener.onCommunicateNewEvent(origin, destination, meetingTime.getTime(), true, travelTime );
                         communicationListener.onChangeFragment(3);
                     }
                 }
             }
         });
-        //Initialize meetingTime
-        meetingTime = new TimePickerFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTime).commit();
-        meetingTime.setCurrentTime();
-        meetingTime.durationChangeListener=this;
-
+        
         //Initialize Class to calculate time distance between two places
         geoApiContext = new GeoApiContext.Builder()
                 .apiKey(getResources().getString(R.string.apiKey))
@@ -99,19 +118,38 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
      * Create a drop down menu for to choose the mean of transport
      */
     private void createDropDownMenu(){
-        //Components I need
-        ac_meansOfTransport= v.findViewById(R.id.auto_complete_txtView);
+        Context context= this.getContext();
+        ac_meansOftransport = new DropDownMenu() ;
+        getChildFragmentManager().beginTransaction().replace(R.id.ac_meansOfTransport, ac_meansOftransport).commit();
 
-        ArrayAdapter<String> adapterDropdownMenu= new ArrayAdapter<>(this.getContext(), R.layout.fragment_dropdown_element, dropdownElements);
-        ac_meansOfTransport.setAdapter(adapterDropdownMenu);
-        ac_meansOfTransport.setHint("By foot"); //default value
-        ac_meansOfTransport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        new Handler().postDelayed(new Runnable(){
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkTimeDistance();
+            public void run() {
+                // Code to be executed after the delay
+                ac_meansOftransport.insertElements(dropdownElements, context);
+                if(byFoot== true){
+                    ac_meansOftransport.setHint("By foot");
+                }
+                else{
+                    ac_meansOftransport.setHint("By car");
+                }
+                ac_meansOftransport.getTextView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.println(DEBUG, TAG, "Selected mean of transport is "+position);
+                            if(position==1){
+                                byFoot=false;
+                            }
+                            else{
+                                byFoot=true;
+                            }
+                            checkTimeDistance();
+                    }
+                });
             }
-        });
+        }, 150);
     }
+
     /**
      * Create an Google autocomplete bar to choose the meeting point
      */
@@ -140,6 +178,11 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         else{
             Log.d("TAG", "Il frammento era nullo");
         }
+        //display place already chosen
+        if(destination!=null){
+            acb_meetingPoint.setText(destination.getName());
+            checkTimeDistance();
+        }
     }
     /**
      * Create an Google autocomplete bar to choose the leaving point
@@ -152,6 +195,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         if (acb_leavingPoint != null) {
             acb_leavingPoint.setPlaceFields(Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS)); //what you get from google maps, correct it
             acb_leavingPoint.setHint("Place you are leaving from");
+
             acb_leavingPoint.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
@@ -169,7 +213,13 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         else{
             Log.d("TAG", "Il frammento era nullo");
         }
+        //display place already chosen
+        if(origin!=null){
+            acb_leavingPoint.setText(origin.getName());
+            checkTimeDistance();
+        }
     }
+
 
     /**
      * Check if both originPlace and destinationPlace are set
@@ -178,8 +228,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
     private void checkTimeDistance(){
         //Check the travel mode
         String travelMode;
-        String meanOfTransport= String.valueOf(ac_meansOfTransport.getText());
-        if(meanOfTransport.equals("By car")){
+        if(byFoot==false){
             travelMode="DRIVING";
         }
         else{
@@ -197,6 +246,36 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                 // Access the distance and duration from the result
                 com.google.maps.model.Duration duration = result.routes[0].legs[0].duration;
                 travelTime=new TimeFormatter(duration);
+                //the travel should last less than one day
+                if(travelTime.getDays()!=0){
+                    Toast.makeText(getContext(), "More than one day to reach the meeting point...choose another leaving point", Toast.LENGTH_LONG).show();
+                    // to make the UI reactive
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            acb_leavingPoint.setText("");
+                        }
+                    }, 1);
+                    origin=null;
+                    tv_leavingPoint.setText("Leaving point");
+                    return;
+                }
+                leavingTime= new TimeFormatter(meetingTimeFrag.getEn_minutes(), meetingTimeFrag.getEn_hour(),meetingTimeFrag.getTime().getDays());
+
+                leavingTime.subtractTimeFormatter(travelTime);
+                Log.println(DEBUG, TAG, "leavingTime is "+ leavingTime + " and meeting time is "+meetingTimeFrag.getTime());
+                if(checkIfTomorrow(leavingTime)) {
+                    tv_isTomorrow.setVisibility(View.VISIBLE);
+                    tv_message.setVisibility(View.VISIBLE);
+                    tv_message.setText("Even leaving now you won't make it in time today, but we can plan it for tomorrow");
+                    //Toast.makeText(getContext(), "Even leaving now you won't make it in time today, but we can plan it for tomorrow", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    tv_isTomorrow.setVisibility(View.INVISIBLE);
+                    tv_message.setVisibility(View.INVISIBLE);
+                }
+
+
                 tv_travelTime.setText(travelTime.toString());
             } catch (Exception e) {
                 Log.d("TAG", e.toString());
@@ -222,29 +301,39 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         }
     }
     /**
-     * To update isTomorrow when the meetingTime changes
+     * To update isTomorrow when the meetingTimeFrag changes
      * @param newTime new time
      */
     @Override
     public void onDurationChanged(TimeFormatter newTime) {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        if(newTime.getHours()<hour){
-            isTomorrow=true;
-        }
-        else if(newTime.getHours()==hour && newTime.getMinutes()<=minute){
-            isTomorrow=true;
-        }
-        else{
-            isTomorrow=false;
-        }
+        isTomorrow=checkIfTomorrow(newTime);
 
         if(isTomorrow==true) {
             tv_isTomorrow.setVisibility(View.VISIBLE);
+            tv_message.setVisibility(View.VISIBLE);
+            tv_message.setText("The arrival time is before the current time");
+            //Toast.makeText(getContext(), "The arrival time is before the current time", Toast.LENGTH_LONG).show();
+            return;
         }
         else{
             tv_isTomorrow.setVisibility(View.INVISIBLE);
+            tv_message.setVisibility(View.INVISIBLE);
+        }
+        meetingTime=meetingTimeFrag.getTime();
+        checkTimeDistance();
+    }
+    Boolean checkIfTomorrow(TimeFormatter timeToCheck){
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        if(timeToCheck.getHours()<hour){
+            return true;
+        }
+        else if(timeToCheck.getHours()==hour && timeToCheck.getMinutes()<=minute){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }

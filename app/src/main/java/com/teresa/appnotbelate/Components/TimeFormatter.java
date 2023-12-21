@@ -1,4 +1,4 @@
-package com.teresa.appnotbelate;
+package com.teresa.appnotbelate.Components;
 
 public class TimeFormatter {
     long totMinutes,minutes, hours, days;
@@ -42,6 +42,15 @@ public class TimeFormatter {
      */
     public void addTimeFormatter(TimeFormatter e){
         totMinutes= totMinutes+ e.getTotMinutes();
+        updateAttributes();
+    }
+
+    /**
+     * To subtract at the current duration another one
+     * @param e duration to subtract
+     */
+    public void subtractTimeFormatter(TimeFormatter e){
+        totMinutes= totMinutes- e.getTotMinutes();
         updateAttributes();
     }
 
@@ -93,6 +102,14 @@ public class TimeFormatter {
         this.totMinutes = totMinutes;
     }
 
+    public long getDays() {
+        return days;
+    }
+
+    public void setDays(long days) {
+        this.days = days;
+    }
+
     /**
      * To print the duration as minutes, hours and days
      * @return duration formatted as a string
@@ -109,6 +126,13 @@ public class TimeFormatter {
         if(minutes!= 0){
             formattedDuration= formattedDuration.concat(minutes+" min");
         }
+        return formattedDuration;
+    }
+
+    public String toStringAsTime() {
+        String formattedDuration="";
+        formattedDuration= formattedDuration.concat(hours+" : ");
+        formattedDuration= formattedDuration.concat(String.format("%02d", minutes));
         return formattedDuration;
     }
 }

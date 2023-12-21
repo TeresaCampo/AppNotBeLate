@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InfoCarFragment">
+    tools:context=".newEventSetting.InfoCarFragment">
 
     <TextView
         android:id="@+id/tv_timeToPark"
@@ -65,10 +65,11 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="80dp"
         android:text="- - - - - - - - - - >"
         app:layout_constraintBottom_toTopOf="@+id/back"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -111,5 +112,29 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_isTomorrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Tomorrow"
+        android:textColor="#F44336"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/tv_meetingPoint"
+        app:layout_constraintStart_toEndOf="@+id/tv_leavingPoint"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="287dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#F44336"
+        android:textColorHint="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/tv_isTomorrow"
+        app:layout_constraintStart_toStartOf="@+id/tv_isTomorrow"
+        app:layout_constraintTop_toBottomOf="@+id/tv_isTomorrow" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
