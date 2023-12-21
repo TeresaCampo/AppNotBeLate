@@ -1,21 +1,27 @@
 package com.teresa.appnotbelate.newEventSetting;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.libraries.places.api.model.Place;
+import com.teresa.appnotbelate.CommunicationActivityFragments;
 import com.teresa.appnotbelate.Components.TimeFormatter;
 import com.teresa.appnotbelate.R;
 
 
 public class ConfirmAndStartEventWithCar extends Fragment {
     View v;
+    CommunicationActivityFragments communicationListener;
+    Button bn_back, bn_setAlarm;
     TextView tv_timeToGetReady, tv_timeLeave, tv_timeStartCar, tv_timePark, tv_timeArrived, tv_isTomorrow;
 
     public ConfirmAndStartEventWithCar() {
@@ -47,7 +53,32 @@ public class ConfirmAndStartEventWithCar extends Fragment {
         tv_timeStartCar=v.findViewById(R.id.tv_timeStartCar);
         tv_timePark=v.findViewById(R.id.tv_timePark);
         tv_timeArrived=v.findViewById(R.id.tv_timeArrived);
+        bn_back=v.findViewById(R.id.back);
+        bn_setAlarm=v.findViewById(R.id.setAlarm);
+
+        bn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (communicationListener != null) {
+                    communicationListener.onChangeFragment(3);
+                }
+
+            }
+        });
 
         return v;
+    }
+    /**
+     * To set the communicationListener to communicate with MainActivity
+     * @param context
+     */
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof CommunicationActivityFragments) {
+            communicationListener = (CommunicationActivityFragments) context;
+        } else {
+            throw new ClassCastException(context + " must implement OnFragmentInteractionListener");
+        }
     }
 }

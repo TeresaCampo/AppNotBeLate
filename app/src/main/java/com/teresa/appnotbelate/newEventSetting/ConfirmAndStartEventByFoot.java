@@ -1,5 +1,6 @@
 package com.teresa.appnotbelate.newEventSetting;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.teresa.appnotbelate.CommunicationActivityFragments;
 import com.teresa.appnotbelate.Components.TimeFormatter;
 import com.teresa.appnotbelate.R;
 
 public class ConfirmAndStartEventByFoot extends Fragment {
+    CommunicationActivityFragments communicationListener;
+
     View v;
     TextView tv_timeToGetReady, tv_timeLeave, tv_timeArrived, tv_isTomorrow;
     Button bn_back, bn_setAlarm;
@@ -45,10 +50,26 @@ public class ConfirmAndStartEventByFoot extends Fragment {
         bn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (communicationListener != null) {
+                        communicationListener.onChangeFragment(3);
+                }
 
             }
         });
 
         return v;
+    }
+    /**
+     * To set the communicationListener to communicate with MainActivity
+     * @param context
+     */
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof CommunicationActivityFragments) {
+            communicationListener = (CommunicationActivityFragments) context;
+        } else {
+            throw new ClassCastException(context + " must implement OnFragmentInteractionListener");
+        }
     }
 }
