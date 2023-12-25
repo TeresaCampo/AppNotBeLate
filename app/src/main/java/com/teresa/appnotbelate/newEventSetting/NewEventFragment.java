@@ -36,6 +36,7 @@ import java.util.Calendar;
 
 
 public class NewEventFragment extends Fragment implements TimePickerFragment.DurationChangeListener {
+    private static final String TAG = "MyDebug";
     View v;
     GeoApiContext geoApiContext;
     String[] dropdownElements= {"By foot", "By car"};
@@ -54,8 +55,6 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.println(DEBUG,TAG,"origin place is "+origin);
-        // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_new_event, container, false);
 
         //Components that I have to work on
@@ -65,7 +64,6 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
 
         //Create autocomplete bar for leaving and meeting point
         createAutocompleteBarMeetingPoint();
-
         createAutocompleteBarLeavingPoint();
         
         //Create dropDown menu with means of transport
@@ -75,13 +73,22 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         if(meetingTimeFrag==null) {
             meetingTimeFrag = new TimePickerFragment();
             meetingTimeFrag.setCurrentTime();
+            getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTimeFrag).commit();
             meetingTime= meetingTimeFrag.getTime();
             meetingTimeFrag.setDurationChangeListener(this);
         }
         else{
             meetingTimeFrag.setSameTime(meetingTime);
+            getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTimeFrag).commit();
+
+            if(checkIfTomorrow(meetingTime)) {
+                tv_isTomorrow.setVisibility(View.VISIBLE);
+                tv_message.setVisibility(View.VISIBLE);
+                tv_message.setText("Even leaving now you won't make it in time today, but we can plan it for tomorrow");
+                //Toast.makeText(getContext(), "Even leaving now you won't make it in time today, but we can plan it for tomorrow", Toast.LENGTH_LONG).show();
+            }
         }
-        getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTimeFrag).commit();
+        //getChildFragmentManager().beginTransaction().replace(R.id.frg_meetingTime, meetingTimeFrag).commit();
 
         //Create "next" button
         nextButton= v.findViewById(R.id.nextButton);
@@ -105,7 +112,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                 }
             }
         });
-        
+
         //Initialize Class to calculate time distance between two places
         geoApiContext = new GeoApiContext.Builder()
                 .apiKey(getResources().getString(R.string.apiKey))
@@ -120,35 +127,29 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
     private void createDropDownMenu(){
         Context context= this.getContext();
         ac_meansOftransport = new DropDownMenu() ;
-        getChildFragmentManager().beginTransaction().replace(R.id.ac_meansOfTransport, ac_meansOftransport).commit();
-
-        new Handler().postDelayed(new Runnable(){
+        ac_meansOftransport.setContext(context);
+        ac_meansOftransport.setDropdownElements(dropdownElements);
+        ac_meansOftransport.setClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void run() {
-                // Code to be executed after the delay
-                ac_meansOftransport.insertElements(dropdownElements, context);
-                if(byFoot== true){
-                    ac_meansOftransport.setHint("By foot");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position==1){
+                    byFoot=false;
                 }
                 else{
-                    ac_meansOftransport.setHint("By car");
+                    byFoot=true;
                 }
-                ac_meansOftransport.getTextView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.println(DEBUG, TAG, "Selected mean of transport is "+position);
-                            if(position==1){
-                                byFoot=false;
-                            }
-                            else{
-                                byFoot=true;
-                            }
-                            checkTimeDistance();
-                    }
-                });
+                checkTimeDistance();
             }
-        }, 150);
+        });
+        if(byFoot== true){
+            ac_meansOftransport.setHint("By foot");
+        }
+        else{
+            ac_meansOftransport.setHint("By car");
+        }
+        getChildFragmentManager().beginTransaction().replace(R.id.ac_meansOfTransport, ac_meansOftransport).commit();
     }
+
 
     /**
      * Create an Google autocomplete bar to choose the meeting point
@@ -170,15 +171,16 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                 }
                 @Override
                 public void onError(@NonNull Status status) {
+                    Log.e( TAG, "Problem with Google API "+status);
                     destination=null;
                     tv_meetingPoint.setText("Meeting point");
                 }
             });
         }
         else{
-            Log.d("TAG", "Il frammento era nullo");
+            Log.e(TAG, "Error while creating meeting point autocomplete bar(null fragment)");
         }
-        //display place already chosen
+        //eventually initialize
         if(destination!=null){
             acb_meetingPoint.setText(destination.getName());
             checkTimeDistance();
@@ -205,15 +207,16 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                 }
                 @Override
                 public void onError(@NonNull Status status) {
+                    Log.e( TAG, "Problem with Google API "+status);
                     origin=null;
                     tv_leavingPoint.setText("Leaving point");
                 }
             });
         }
         else{
-            Log.d("TAG", "Il frammento era nullo");
+            Log.e(TAG, "Error while creating meeting point autocomplete bar(null fragment)");
         }
-        //display place already chosen
+        //eventually initialize
         if(origin!=null){
             acb_leavingPoint.setText(origin.getName());
             checkTimeDistance();
@@ -240,7 +243,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                 DirectionsResult result = DirectionsApi.newRequest(geoApiContext)
                         .origin(origin.getAddress())
                         .destination(destination.getAddress())
-                        .mode(TravelMode.valueOf(travelMode)) // You can change the travel mode
+                        .mode(TravelMode.valueOf(travelMode))
                         .await();
 
                 // Access the distance and duration from the result
@@ -263,23 +266,21 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                 leavingTime= new TimeFormatter(meetingTimeFrag.getEn_minutes(), meetingTimeFrag.getEn_hour(),meetingTimeFrag.getTime().getDays());
 
                 leavingTime.subtractTimeFormatter(travelTime);
-                Log.println(DEBUG, TAG, "leavingTime is "+ leavingTime + " and meeting time is "+meetingTimeFrag.getTime());
                 if(checkIfTomorrow(leavingTime)) {
                     tv_isTomorrow.setVisibility(View.VISIBLE);
                     tv_message.setVisibility(View.VISIBLE);
                     tv_message.setText("Even leaving now you won't make it in time today, but we can plan it for tomorrow");
-                    //Toast.makeText(getContext(), "Even leaving now you won't make it in time today, but we can plan it for tomorrow", Toast.LENGTH_LONG).show();
                 }
                 else{
                     tv_isTomorrow.setVisibility(View.INVISIBLE);
                     tv_message.setVisibility(View.INVISIBLE);
                 }
-
-
+                Log.d(TAG, "Leaving point= "+origin.getName()+", meeting point is "+destination.getName()+", mean of transport is "+travelMode+", travel time is "+travelTime.toString());
                 tv_travelTime.setText(travelTime.toString());
-            } catch (Exception e) {
-                Log.d("TAG", e.toString());
-                Toast.makeText(getContext(), "Exception"+ e, Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e) {
+                Log.d(TAG, "Error with google API while trying to calculate time distance between origin and destination");
+                Log.d(TAG, e.toString());
             }
         }
         else{
@@ -300,6 +301,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
             throw new ClassCastException(context + " must implement CommunicationActivityFragments");
         }
     }
+
     /**
      * To update isTomorrow when the meetingTimeFrag changes
      * @param newTime new time
@@ -312,7 +314,6 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
             tv_isTomorrow.setVisibility(View.VISIBLE);
             tv_message.setVisibility(View.VISIBLE);
             tv_message.setText("The arrival time is before the current time");
-            //Toast.makeText(getContext(), "The arrival time is before the current time", Toast.LENGTH_LONG).show();
             return;
         }
         else{
@@ -322,6 +323,12 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         meetingTime=meetingTimeFrag.getTime();
         checkTimeDistance();
     }
+
+    /**
+     * To check if the meeting time is tomorrow or today
+     * @param timeToCheck meeting time
+     * @return true if it is tomorrow
+     */
     Boolean checkIfTomorrow(TimeFormatter timeToCheck){
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);

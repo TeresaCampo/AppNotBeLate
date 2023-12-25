@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.teresa.appnotbelate.CommunicationActivityFragments;
@@ -21,10 +22,23 @@ public class ConfirmAndStartEventByFoot extends Fragment {
     View v;
     TextView tv_timeToGetReady, tv_timeLeave, tv_timeArrived, tv_isTomorrow;
     Button bn_back, bn_setAlarm;
+    String timeToGetReady, leavingTime, meetingTime;
+    Boolean isTomorrow;
 
     public ConfirmAndStartEventByFoot() {
         // Required empty public constructor
     }
+    public void insertData( TimeFormatter leavingTime, TimeFormatter meetingTime, TimeFormatter gettingReadyTime, Boolean isTomorrow) {
+        this.isTomorrow = isTomorrow;
+        //time to start to get ready
+        timeToGetReady = leavingTime.toStringAsTime();
+        //leaving time
+        leavingTime.addTimeFormatter(gettingReadyTime);
+        this.leavingTime = leavingTime.toStringAsTime();
+        //meeting time
+        this.meetingTime = meetingTime.toStringAsTime();
+    }
+    /*
     public void insertData(TimeFormatter leavingTime, TimeFormatter meetingTime, TimeFormatter gettingReadyTime, Boolean isTomorrow){
         if(isTomorrow){
             tv_isTomorrow.setVisibility(View.VISIBLE);
@@ -35,6 +49,8 @@ public class ConfirmAndStartEventByFoot extends Fragment {
         tv_timeLeave.setText(leavingTime.toStringAsTime());
         tv_timeArrived.setText(meetingTime.toStringAsTime());
     }
+
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +74,17 @@ public class ConfirmAndStartEventByFoot extends Fragment {
         });
 
         return v;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(isTomorrow){
+            tv_isTomorrow.setVisibility(View.VISIBLE);
+        }
+        tv_timeToGetReady.setText(timeToGetReady);
+        tv_timeLeave.setText(leavingTime);
+        tv_timeArrived.setText(meetingTime);
     }
     /**
      * To set the communicationListener to communicate with MainActivity

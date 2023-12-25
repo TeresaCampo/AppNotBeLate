@@ -1,20 +1,13 @@
 package com.teresa.appnotbelate.Components;
 
-import static com.android.volley.VolleyLog.TAG;
-
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
-
 import com.teresa.appnotbelate.R;
-
 import java.util.Calendar;
 
 /**
@@ -70,7 +63,6 @@ public class TimePickerFragment extends Fragment {
                             time.setHours(newVal);
                             if (durationChangeListener != null) {
                                 durationChangeListener.onDurationChanged(time);
-                                Log.println(Log.DEBUG, TAG, "DEBUG->call durationChangeListener");
                             }
 
                             // Reset the flag
@@ -105,7 +97,6 @@ public class TimePickerFragment extends Fragment {
                             time.setMinutes(newVal);
                             if (durationChangeListener != null) {
                                 durationChangeListener.onDurationChanged(time);
-                                Log.println(Log.DEBUG, TAG, "DEBUG->call durationChangeListener");
                             }
 
                             // Reset the flag
@@ -131,7 +122,6 @@ public class TimePickerFragment extends Fragment {
     public void setNotSelectable(){
         en_minutes.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         en_hour.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        Log.println(Log.DEBUG, TAG, "WATCH ME not selectable--> "+this.en_hour);
 
         en_minutes.setEnabled(false);
         en_hour.setEnabled(false);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -23,24 +24,27 @@ public class ConfirmAndStartEventWithCar extends Fragment {
     CommunicationActivityFragments communicationListener;
     Button bn_back, bn_setAlarm;
     TextView tv_timeToGetReady, tv_timeLeave, tv_timeStartCar, tv_timePark, tv_timeArrived, tv_isTomorrow;
-
+    String timeToGetReady, leavingTime, startTheCarTime, findTheParkTime, meetingTime;
+    Boolean isTomorrow;
     public ConfirmAndStartEventWithCar() {
         // Required empty public constructor
     }
-    public void insertData( TimeFormatter leavingTime,TimeFormatter meetingTime,TimeFormatter gettingReadyTime,  TimeFormatter parkTime, TimeFormatter reachCarTime, Boolean isTomorrow){
-        if(isTomorrow){
-            tv_isTomorrow.setVisibility(View.VISIBLE);
-        }
-
-        tv_timeToGetReady.setText(leavingTime.toStringAsTime());
+    public void insertData( TimeFormatter leavingTime,TimeFormatter meetingTime,TimeFormatter gettingReadyTime,  TimeFormatter parkTime, TimeFormatter reachCarTime, Boolean isTomorrow) {
+        this.isTomorrow = isTomorrow;
+        //time to start to get ready
+        timeToGetReady = leavingTime.toStringAsTime();
+        //leaving time
         leavingTime.addTimeFormatter(gettingReadyTime);
-        tv_timeLeave.setText(leavingTime.toStringAsTime());
+        this.leavingTime = leavingTime.toStringAsTime();
+        //time to start the car
         leavingTime.addTimeFormatter(reachCarTime);
-        tv_timeStartCar.setText(leavingTime.toStringAsTime());
+        startTheCarTime = leavingTime.toStringAsTime();
+        //find the park time
         meetingTime.subtractTimeFormatter(parkTime);
-        tv_timePark.setText(meetingTime.toStringAsTime());
+        findTheParkTime = meetingTime.toStringAsTime();
+        //meeting time
         meetingTime.addTimeFormatter(parkTime);
-        tv_timeArrived.setText(meetingTime.toStringAsTime());
+        this.meetingTime = meetingTime.toStringAsTime();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +57,7 @@ public class ConfirmAndStartEventWithCar extends Fragment {
         tv_timeStartCar=v.findViewById(R.id.tv_timeStartCar);
         tv_timePark=v.findViewById(R.id.tv_timePark);
         tv_timeArrived=v.findViewById(R.id.tv_timeArrived);
-        bn_back=v.findViewById(R.id.back);
+        bn_back=v.findViewById(R.id.bn_back);
         bn_setAlarm=v.findViewById(R.id.setAlarm);
 
         bn_back.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +72,21 @@ public class ConfirmAndStartEventWithCar extends Fragment {
 
         return v;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if(isTomorrow){
+            tv_isTomorrow.setVisibility(View.VISIBLE);
+        }
+        tv_timeToGetReady.setText(timeToGetReady);
+        tv_timeLeave.setText(leavingTime);
+        tv_timeStartCar.setText(startTheCarTime);
+        tv_timePark.setText(findTheParkTime);
+        tv_timeArrived.setText(meetingTime);
+    }
+
     /**
      * To set the communicationListener to communicate with MainActivity
      * @param context

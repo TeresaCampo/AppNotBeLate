@@ -26,6 +26,8 @@ import com.teresa.appnotbelate.Components.TimePickerFragment;
 import java.util.Calendar;
 
 public class InfoCarFragment extends Fragment implements TimePickerFragment.DurationChangeListener {
+    private static final String TAG = "MyDebug";
+
     private CommunicationActivityFragments communicationListener;
     View v;
     TimePickerFragment reachTheCar, parkTheCar;

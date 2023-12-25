@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "790523610872",
+    "project_id": "notbelate",
+    "storage_bucket": "notbelate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790523610872:android:17f8b17b992ab5dd8add0d",
+        "android_client_info": {
+          "package_name": "com.teresa.appnotbelate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790523610872-48ueh97tp801da4vhfsjol43ivsi8l2r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teresa.appnotbelate",
+            "certificate_hash": "b93dd377c8464d893eae0e95c480c06d2faef287"
+          }
+        },
+        {
+          "client_id": "790523610872-n13452osh9menrk802kiios8hj15bmtc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrIdCRIZrSu3PIdnRemH7ui9YtheOgc48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "790523610872-n13452osh9menrk802kiios8hj15bmtc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
