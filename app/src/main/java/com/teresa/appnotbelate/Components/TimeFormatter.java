@@ -1,7 +1,25 @@
 package com.teresa.appnotbelate.Components;
 
+import androidx.annotation.NonNull;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class TimeFormatter {
+    private static final String TAG = "MyDebug";
+    //for timeGap
     long totMinutes,minutes, hours, days;
+    //forTimeOfADay
+    Calendar timeAndDay;
+
+    public TimeFormatter(Date timeAndDay) {
+        Calendar tmpTimeAndDay=Calendar.getInstance();
+        tmpTimeAndDay.setTime(timeAndDay);
+
+        this.timeAndDay = tmpTimeAndDay;
+
+    }
 
     /**
      * To create an instance given the google maps duration
@@ -20,6 +38,11 @@ public class TimeFormatter {
         this.days=days;
         this.hours=hours;
         this.minutes=minutes;
+        //time of a day
+       Calendar calendar=Calendar.getInstance();
+       calendar.set(Calendar.HOUR_OF_DAY,(int) hours); // 15 for 3 PM
+       calendar.set(Calendar.MINUTE, (int)minutes); // 30 minutes
+       this.timeAndDay= calendar;
     }
 
     /**
@@ -34,6 +57,10 @@ public class TimeFormatter {
         this.days = days;
 
         this.totMinutes=(minutes)+(hours*60)+(days*24*60);
+        Calendar calendar=Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,(int) hours); // 15 for 3 PM
+        calendar.set(Calendar.MINUTE, (int)minutes); // 30 minutes
+        this.timeAndDay= calendar;
     }
 
     /**
@@ -41,6 +68,10 @@ public class TimeFormatter {
      * @param e duration to add
      */
     public void addTimeFormatter(TimeFormatter e){
+        //time of a day
+        timeAndDay.add(Calendar.HOUR, e.getTimeAndDay().get(Calendar.HOUR));
+        timeAndDay.add(Calendar.MINUTE, e.getTimeAndDay().get(Calendar.MINUTE));
+        //timeGap
         totMinutes= totMinutes+ e.getTotMinutes();
         updateAttributes();
     }
@@ -50,6 +81,10 @@ public class TimeFormatter {
      * @param e duration to subtract
      */
     public void subtractTimeFormatter(TimeFormatter e){
+        //time of a day
+        timeAndDay.add(Calendar.HOUR, -e.getTimeAndDay().get(Calendar.HOUR));
+        timeAndDay.add(Calendar.MINUTE, -e.getTimeAndDay().get(Calendar.MINUTE));
+        //timeGap
         totMinutes= totMinutes- e.getTotMinutes();
         updateAttributes();
     }
@@ -75,6 +110,9 @@ public class TimeFormatter {
     }
 
     public void setMinutes(long minutes) {
+        //time of a day
+        timeAndDay.set(Calendar.MINUTE, (int) minutes);
+        //timeGap
         if(minutes< this.minutes) totMinutes-=(this.minutes-minutes);
         if(minutes> this.minutes) totMinutes+=(minutes-this.minutes);
         this.minutes = minutes;
@@ -87,6 +125,9 @@ public class TimeFormatter {
     }
 
     public void setHours(long hours) {
+        //time of a day
+        timeAndDay.set(Calendar.HOUR_OF_DAY, (int) hours);
+        //timeGap
         if(hours< this.hours) totMinutes-=(this.hours-hours)*60;
         if(hours> this.hours) totMinutes+=(hours-this.hours)*60;
         this.hours = hours;
@@ -98,22 +139,21 @@ public class TimeFormatter {
         return totMinutes;
     }
 
-    public void setTotMinutes(long totMinutes) {
-        this.totMinutes = totMinutes;
-    }
-
     public long getDays() {
         return days;
     }
 
-    public void setDays(long days) {
-        this.days = days;
+    @NonNull
+    @Override
+    public TimeFormatter clone(){
+        return new TimeFormatter(this.timeAndDay.getTime());
     }
 
     /**
      * To print the duration as minutes, hours and days
      * @return duration formatted as a string
      */
+    @NonNull
     @Override
     public String toString() {
         String formattedDuration="";
@@ -130,9 +170,21 @@ public class TimeFormatter {
     }
 
     public String toStringAsTime() {
-        String formattedDuration="";
-        formattedDuration= formattedDuration.concat(hours+" : ");
-        formattedDuration= formattedDuration.concat(String.format("%02d", minutes));
-        return formattedDuration;
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, EEEE dd", Locale.ENGLISH);
+        return sdf.format(timeAndDay.getTime());
+
     }
+
+    public void setDayToday() {
+        Calendar calendar= Calendar.getInstance();
+        this.timeAndDay.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR));
+    }
+    public void setDayTomorrow() {
+        timeAndDay.add(Calendar.DAY_OF_YEAR, 1);
+    }
+
+    public Calendar getTimeAndDay() {
+        return timeAndDay;
+    }
+
 }

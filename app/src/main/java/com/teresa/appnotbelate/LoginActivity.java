@@ -152,20 +152,6 @@ public class LoginActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     // If document does not exist, create a new one and store information
                     if (document != null && !document.exists()) {
-                        // Display a dialog pane
-                       /*dialog.show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (dialog.isShowing()) {
-                                    dialog.dismiss();
-                                }
-                                // now the user can use the app
-                                startTheApplication();
-                            }
-                        }, 3000); // 3000 milliseconds = 3 seconds
-
-                        */
                         //store data
                         Map<String, Object> user = new HashMap<>();
                         user.put("userId", currentUser.getUid());

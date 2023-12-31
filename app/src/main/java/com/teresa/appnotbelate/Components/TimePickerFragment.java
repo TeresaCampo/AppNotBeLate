@@ -1,6 +1,9 @@
 package com.teresa.appnotbelate.Components;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -95,6 +98,10 @@ public class TimePickerFragment extends Fragment {
                         if (isValueChanged) {
                             // Perform the update here
                             time.setMinutes(newVal);
+                            //Set as day today
+                            time.setDayToday();
+
+
                             if (durationChangeListener != null) {
                                 durationChangeListener.onDurationChanged(time);
                             }
@@ -107,6 +114,12 @@ public class TimePickerFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setSameTime(time);
     }
 
     /**

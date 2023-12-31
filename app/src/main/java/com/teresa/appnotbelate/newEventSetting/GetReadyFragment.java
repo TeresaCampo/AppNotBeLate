@@ -107,7 +107,19 @@ public class GetReadyFragment extends Fragment implements TimePickerFragment.Dur
                 else {
                     if (communicationListener != null) {
                         //Choose what to display next
-                        communicationListener.onCommunicateGetReady(leavingTime, newTravelTime,timePicker2.getTime(),isTomorrow);
+                        TimeFormatter updatedMeetingTime= new TimeFormatter(meetingTime.getMinutes(),meetingTime.getHours(), 0);
+                        TimeFormatter updatedLeavingTime= new TimeFormatter(meetingTime.getMinutes(),meetingTime.getHours(), 0);
+                        if( tv_isTomorrow.getVisibility()==View.VISIBLE){
+                            updatedMeetingTime.setDayTomorrow();
+                            updatedLeavingTime.setDayTomorrow();
+                            isTomorrow=true;
+                        }
+
+                        updatedLeavingTime.subtractTimeFormatter(newTravelTime);
+                        Log.d(TAG, "leavingTime is (calendar):"+updatedLeavingTime.getTimeAndDay().getTime()+", (timeFormatter):"+updatedLeavingTime.toString());
+                        Log.d(TAG, "meetingTime is (calendar):"+updatedMeetingTime.getTimeAndDay().getTime()+", (timeFormatter):"+updatedMeetingTime.toString());
+
+                        communicationListener.onCommunicateGetReady(updatedLeavingTime, updatedMeetingTime, newTravelTime,timePicker2.getTime(),isTomorrow);
                         if(byFoot==true){
                             communicationListener.onChangeFragment(5);
                         }
@@ -124,6 +136,9 @@ public class GetReadyFragment extends Fragment implements TimePickerFragment.Dur
     }
     Boolean checkIfTomorrow(TimeFormatter timeToCheck){
         Calendar calendar = Calendar.getInstance();
+        return timeToCheck.getTimeAndDay().before(calendar);
+        /*
+        Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         if(timeToCheck.getHours()<hour){
@@ -135,6 +150,8 @@ public class GetReadyFragment extends Fragment implements TimePickerFragment.Dur
         else{
             return false;
         }
+
+         */
     }
     /**
      * If so, calculates the time distance and return it
@@ -158,13 +175,11 @@ public class GetReadyFragment extends Fragment implements TimePickerFragment.Dur
         leavingTime.subtractTimeFormatter(newTravelTime);
         Log.println(DEBUG, TAG, "leavingTime is "+ leavingTime + " and meeting time is "+meetingTime);
         if(checkIfTomorrow(leavingTime)) {
-            isTomorrow=true;
             tv_isTomorrow.setVisibility(View.VISIBLE);
             tv_message.setVisibility(View.VISIBLE);
             tv_message.setText("Even leaving now you won't make it in time today, but we can plan it for tomorrow");
         }
         else{
-            isTomorrow=false;
             tv_isTomorrow.setVisibility(View.INVISIBLE);
             tv_message.setVisibility(View.INVISIBLE);
         }

@@ -92,7 +92,19 @@ public class InfoCarFragment extends Fragment implements TimePickerFragment.Dura
             @Override
             public void onClick(View v) {
                 if (communicationListener != null) {
-                    communicationListener.onCommunicateInfoCar(leavingTime, newTravelTime, reachTheCar.getTime(), parkTheCar.getTime(), isTomorrow);
+                    //Log.d(TAG, "(1)Time of this timeFormatter is (calendar):"+calendar.getTime()+", (timeFormatter):"+this.toString());
+                    TimeFormatter updatedMeetingTime= new TimeFormatter(meetingTime.getMinutes(),meetingTime.getHours(), 0);
+                    TimeFormatter updatedLeavingTime= new TimeFormatter(meetingTime.getMinutes(),meetingTime.getHours(), 0);
+                    if( tv_isTomorrow.getVisibility()==View.VISIBLE){
+                        updatedMeetingTime.setDayTomorrow();
+                        updatedLeavingTime.setDayTomorrow();
+                        isTomorrow=true;
+                    }
+
+                    updatedLeavingTime.subtractTimeFormatter(newTravelTime);
+                    Log.d(TAG, "leavingTime is (calendar):"+updatedLeavingTime.getTimeAndDay().getTime()+", (timeFormatter):"+updatedLeavingTime.toString());
+                    Log.d(TAG, "meetingTime is (calendar):"+updatedMeetingTime.getTimeAndDay().getTime()+", (timeFormatter):"+updatedMeetingTime.toString());
+                    communicationListener.onCommunicateInfoCar(updatedLeavingTime,updatedMeetingTime, newTravelTime, reachTheCar.getTime(), parkTheCar.getTime(), isTomorrow);
                     communicationListener.onChangeFragment(3);
 
                 }
@@ -101,6 +113,9 @@ public class InfoCarFragment extends Fragment implements TimePickerFragment.Dura
         return v;
     }
     Boolean checkIfTomorrow(TimeFormatter timeToCheck){
+        Calendar calendar = Calendar.getInstance();
+        return timeToCheck.getTimeAndDay().before(calendar);
+        /*
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -113,16 +128,16 @@ public class InfoCarFragment extends Fragment implements TimePickerFragment.Dura
         else{
             return false;
         }
+
+         */
     }
     /**
     * If so, calculates the time distance and return it
      */
     private void checkTimeDistance(){
         TimeFormatter tmpTravelTime= new TimeFormatter(travelTime.getMinutes(), travelTime.getHours(), travelTime.getDays());
-        Log.println(DEBUG, TAG, "(1)tmp travel time is "+ tmpTravelTime + " and meeting time is "+meetingTime);
         tmpTravelTime.addTimeFormatter(parkTheCar.getTime());
         tmpTravelTime.addTimeFormatter(reachTheCar.getTime());
-        Log.println(DEBUG, TAG, "(1)tmp travel time is "+ tmpTravelTime + " and meeting time is "+meetingTime);
 
         //the travel should last less than one day
                 if(tmpTravelTime.getDays()!=0){
@@ -137,13 +152,11 @@ public class InfoCarFragment extends Fragment implements TimePickerFragment.Dura
                 leavingTime.subtractTimeFormatter(newTravelTime);
                 Log.println(DEBUG, TAG, "leavingTime is "+ leavingTime + " and meeting time is "+meetingTime);
         if(checkIfTomorrow(leavingTime)) {
-            isTomorrow=true;
             tv_isTomorrow.setVisibility(View.VISIBLE);
             tv_message.setVisibility(View.VISIBLE);
             tv_message.setText("Even leaving now you won't make it in time today, but we can plan it for tomorrow");
         }
         else{
-            isTomorrow=false;
             tv_isTomorrow.setVisibility(View.INVISIBLE);
             tv_message.setVisibility(View.INVISIBLE);
         }

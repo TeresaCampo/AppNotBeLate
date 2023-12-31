@@ -101,7 +101,17 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
                         Toast.makeText(getContext(), "Please, insert all the data", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    communicationListener.onCommunicateNewEvent(origin, destination,meetingTimeFrag.getTime(), byFoot, travelTime,leavingTime, isTomorrow );
+                    TimeFormatter updatedMeetingTime= new TimeFormatter(meetingTime.getMinutes(),meetingTime.getHours(), 0);
+                    TimeFormatter updatedLeavingTime= new TimeFormatter(meetingTime.getMinutes(),meetingTime.getHours(), 0);
+                    if(isTomorrow){
+                        updatedMeetingTime.setDayTomorrow();
+                        updatedLeavingTime.setDayTomorrow();
+                    }
+                    updatedLeavingTime.subtractTimeFormatter(travelTime);
+                    Log.d(TAG, "leavingTime is (calendar):"+updatedLeavingTime.getTimeAndDay().getTime()+", (timeFormatter):"+updatedLeavingTime.toString());
+                    Log.d(TAG, "meetingTime is (calendar):"+updatedMeetingTime.getTimeAndDay().getTime()+", (timeFormatter):"+updatedMeetingTime.toString());
+
+                    communicationListener.onCommunicateNewEvent(origin, destination,updatedMeetingTime, byFoot, travelTime,updatedLeavingTime, isTomorrow );
 
                     if(byFoot==false){
                         communicationListener.onChangeFragment(2);
@@ -182,6 +192,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         }
         //eventually initialize
         if(destination!=null){
+            tv_meetingPoint.setText(destination.getName());
             acb_meetingPoint.setText(destination.getName());
             checkTimeDistance();
         }
@@ -218,6 +229,7 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         }
         //eventually initialize
         if(origin!=null){
+            tv_leavingPoint.setText(origin.getName());
             acb_leavingPoint.setText(origin.getName());
             checkTimeDistance();
         }
@@ -331,7 +343,9 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
      */
     Boolean checkIfTomorrow(TimeFormatter timeToCheck){
         Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        isTomorrow= timeToCheck.getTimeAndDay().before(calendar);
+        return isTomorrow;
+        /*int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         if(timeToCheck.getHours()<hour){
             return true;
@@ -341,6 +355,6 @@ public class NewEventFragment extends Fragment implements TimePickerFragment.Dur
         }
         else{
             return false;
-        }
+        }*/
     }
 }

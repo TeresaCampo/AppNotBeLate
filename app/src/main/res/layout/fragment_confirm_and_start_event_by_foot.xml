@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".newEventSetting.ConfirmAndStartEventByFoot">
-    >
+
 
     <TextView
         android:id="@+id/textView6"
@@ -132,5 +132,16 @@
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/tv_arrived"
         app:layout_constraintStart_toStartOf="@+id/tv_arrived" />
+
+    <Button
+        android:id="@+id/bn_deleteEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete event"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/setAlarm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
