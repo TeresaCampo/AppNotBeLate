@@ -78,7 +78,7 @@ public class ConfirmAndStartEventWithCar extends Fragment {
         return v;
     }
 
-    void setAlarms() {
+    public void setAlarms() {
         //set the alarm when we need to get ready
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //ALARM WHEN YOU NEED TO GET READY
@@ -165,6 +165,9 @@ public class ConfirmAndStartEventWithCar extends Fragment {
         this.originName=existingEvent.getOriginName();
         this.destinationName= existingEvent.getDestinationName();
         this.existingEvent=true;
+
+        this.tf_timeToLeave=new TimeFormatter(existingEvent.getLeavingTime());
+        this.tf_timeToGetReady=new TimeFormatter(existingEvent.getGettingReadyTime());
     }
 
     /**

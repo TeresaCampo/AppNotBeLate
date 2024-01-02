@@ -31,6 +31,8 @@ import com.teresa.appnotbelate.newEventSetting.ConfirmAndStartEventWithCar;
 import com.teresa.appnotbelate.newEventSetting.GetReadyFragment;
 import com.teresa.appnotbelate.newEventSetting.InfoCarFragment;
 import com.teresa.appnotbelate.newEventSetting.NewEventFragment;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -143,6 +145,17 @@ public class MainActivity extends AppCompatActivity implements CommunicationActi
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("firstTime", isFirstTime);
         editor.apply();
+    }
+    public void setAlarmsFlag(boolean value) {
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("alarmsFlag", value);
+        editor.apply();
+    }
+
+    private boolean isAlarmsFlagTrue() {
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        return preferences.getBoolean("alarmsFlag", false);
     }
 
     /**
@@ -382,15 +395,30 @@ public class MainActivity extends AppCompatActivity implements CommunicationActi
                         existingEvent.setCarDetails(startTheCarTime, parkTheCarTime);
                         currentUserInfo.setExistingEvent(existingEvent);
 
+
                         // Check if 'byCar' is true and then act accordingly
                         if (byCar != null && byCar) {
+                            if(existingEvent.getMeetingTime().before(Calendar.getInstance().getTime())){
+                                onDeleteCarEvent();
+                            }
                             ConfirmAndStartEventWithCar confirmAndStartEventWithCar= new ConfirmAndStartEventWithCar();
                             confirmAndStartEventWithCar.insertDataExistingEvent(existingEvent);
+                            if(isAlarmsFlagTrue()){
+                                confirmAndStartEventWithCar.setAlarms();
+                                setAlarmsFlag(false);
+                            }
                             fragmentManager.beginTransaction().replace(R.id.container, confirmAndStartEventWithCar).commit();
                         }
                         if(byCar!=null && !byCar){
+                            if(existingEvent.getMeetingTime().before(Calendar.getInstance().getTime())){
+                                onDeleteByFootEvent();
+                            }
                             ConfirmAndStartEventByFoot confirmAndStartEventByFoot= new ConfirmAndStartEventByFoot();
                             confirmAndStartEventByFoot.insertDataExistingEvent(existingEvent);
+                            if(isAlarmsFlagTrue()){
+                                confirmAndStartEventByFoot.setAlarms();
+                                setAlarmsFlag(false);
+                            }
                             fragmentManager.beginTransaction().replace(R.id.container, confirmAndStartEventByFoot).commit();
                         }
 

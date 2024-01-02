@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,10 +9,11 @@
 
     <TextView
         android:id="@+id/textView6"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="Ok, this is your schedule"
+        android:text="THIS IS YOUR SCHEDULE"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,22 +105,27 @@
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/tv_leave"
         app:layout_constraintStart_toStartOf="@+id/tv_leave" />
+
     <Button
         android:id="@+id/bn_back"
+        style="@style/CustomMaterialButton"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="16dp"
         android:text="back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/setAlarm"
+        style="@style/CustomMaterialButtonNoSize"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="16dp"
         android:text="set the alarm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -25,10 +25,12 @@
         android:id="@+id/tabLayout"
         android:layout_width="478dp"
         android:layout_height="wrap_content"
+        android:background="#F34F7B8F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabTextColor="#FFFFFF">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

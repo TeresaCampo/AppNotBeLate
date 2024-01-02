@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NumberPickerStyleWhiteText">
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+    <style name="CustomMaterialButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/lightBlue</item>
+        <item name="layout_constraintWidth">120dp</item>
+        <!-- Add other customizations if needed -->
+    </style>
+    <style name="CustomMaterialButtonNoSize" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/lightBlue</item>
+
+        <!-- Add other customizations if needed -->
+    </style>
+</resources>

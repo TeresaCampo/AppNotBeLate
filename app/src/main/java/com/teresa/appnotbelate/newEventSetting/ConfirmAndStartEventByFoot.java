@@ -108,6 +108,9 @@ public class ConfirmAndStartEventByFoot extends Fragment {
         this.originName=existingEvent.getOriginName();
         this.destinationName= existingEvent.getDestinationName();
         this.existingEvent=true;
+
+        this.tf_timeToLeave=new TimeFormatter(existingEvent.getLeavingTime());
+        this.tf_timeToGetReady=new TimeFormatter(existingEvent.getGettingReadyTime());
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -126,7 +129,7 @@ public class ConfirmAndStartEventByFoot extends Fragment {
             bn_back.setVisibility(View.INVISIBLE);
         }
     }
-    void setAlarms() {
+    public void setAlarms() {
         //set the alarm when we need to get ready
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //ALARM WHEN YOU NEED TO GET READY

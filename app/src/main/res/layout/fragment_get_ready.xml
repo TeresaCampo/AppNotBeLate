@@ -8,11 +8,12 @@
 
     <TextView
         android:id="@+id/textView4"
+        android:textStyle="bold"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:gravity="center"
-        android:text="Ok, insert last details..."
+        android:text="...LAST DETAILS..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +33,8 @@
 
     <FrameLayout
         android:id="@+id/firstReadyTime"
-        android:layout_width="133dp"
-        android:layout_height="62dp"
+        android:layout_width="330dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -43,7 +44,7 @@
         android:layout_width="336dp"
         android:layout_height="109dp"
         android:layout_marginTop="32dp"
-        android:text="Are you sure that you will actually leave the starting point in tot minutes?\nLet's consider some minutes to find the keys, to choose the shoes..\n\nSo again...how much time to get ready?"
+        android:text="Sure? Let's consider some minutes to find the keys, to choose the shoes.."
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/firstReadyTime"
         app:layout_constraintTop_toBottomOf="@+id/firstReadyTime" />
@@ -51,8 +52,8 @@
 
     <FrameLayout
         android:id="@+id/secondReadyTime"
-        android:layout_width="133dp"
-        android:layout_height="62dp"
+        android:layout_width="330dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="@+id/tv_areYouSure"
         app:layout_constraintTop_toBottomOf="@+id/tv_areYouSure" />
 
@@ -94,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tomorrow"
-        android:textColor="#F44336"
+        android:textColor="@color/light_red"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
@@ -116,7 +117,7 @@
         android:layout_width="287dp"
         android:layout_height="29dp"
         android:layout_marginTop="8dp"
-        android:textColor="#F44336"
+        android:textColor="@color/light_red"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="@+id/tv_isTomorrow"
         app:layout_constraintHorizontal_bias="0.493"
@@ -125,20 +126,24 @@
 
     <Button
         android:id="@+id/next"
+        style="@style/CustomMaterialButton"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="16dp"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/back"
+        style="@style/CustomMaterialButton"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="16dp"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

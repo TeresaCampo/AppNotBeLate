@@ -20,8 +20,8 @@
 
     <FrameLayout
         android:id="@+id/frg_parkTheCar"
-        android:layout_width="133dp"
-        android:layout_height="62dp"
+        android:layout_width="330dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="@+id/tv_timeToPark"
         app:layout_constraintTop_toBottomOf="@+id/tv_timeToPark" />
 
@@ -38,8 +38,8 @@
 
     <FrameLayout
         android:id="@+id/frg_reachTheCar"
-        android:layout_width="133dp"
-        android:layout_height="62dp"
+        android:layout_width="330dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="@+id/textView17"
         app:layout_constraintTop_toBottomOf="@+id/textView17"></FrameLayout>
 
@@ -85,20 +85,23 @@
 
     <Button
         android:id="@+id/next"
-        android:layout_width="wrap_content"
+        style="@style/CustomMaterialButton"
+
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="16dp"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/back"
+        style="@style/CustomMaterialButton"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="16dp"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -108,8 +111,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="You will use the car, let me know something more...
-"
+        android:text="...SOME MORE DETAILS ABOUT THE CAR..."
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Tomorrow"
-        android:textColor="#F44336"
+        android:textColor="@color/light_red"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/tv_meetingPoint"
         app:layout_constraintStart_toEndOf="@+id/tv_leavingPoint"
@@ -132,7 +135,7 @@
         android:layout_width="287dp"
         android:layout_height="29dp"
         android:layout_marginTop="5dp"
-        android:textColor="#F44336"
+        android:textColor="@color/light_red"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="@+id/tv_isTomorrow"
         app:layout_constraintStart_toStartOf="@+id/tv_isTomorrow"

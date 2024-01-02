@@ -11,7 +11,8 @@
         android:layout_width="361dp"
         android:layout_height="71dp"
         android:gravity="center"
-        android:text="Hi! Let's plan a new event..."
+        android:textStyle="bold"
+        android:text="LET'S PLAN A NEW EVENT..."
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,9 +81,10 @@
 
     <Button
         android:id="@+id/nextButton"
+        style="@style/CustomMaterialButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,8 +93,8 @@
 
     <FrameLayout
         android:id="@+id/frg_meetingTime"
-        android:layout_width="133dp"
-        android:layout_height="62dp"
+        android:layout_width="330dp"
+        android:layout_height="75dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="@+id/ac_meeting_point"
         app:layout_constraintTop_toBottomOf="@+id/ac_meeting_point" />
@@ -153,7 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Tomorrow"
-        android:textColor="#F44336"
+        android:textColor="@color/light_red"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/tv_meetingPoint"
         app:layout_constraintStart_toEndOf="@+id/tv_leavingPoint"
@@ -164,7 +166,7 @@
         android:layout_width="287dp"
         android:layout_height="29dp"
         android:layout_marginTop="5dp"
-        android:textColor="#F44336"
+        android:textColor="@color/light_red"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="@+id/tv_isTomorrow"
         app:layout_constraintStart_toStartOf="@+id/tv_isTomorrow"

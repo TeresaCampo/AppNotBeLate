@@ -9,10 +9,11 @@
 
     <TextView
         android:id="@+id/textView6"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="Ok, this is your schedule"
+        android:text="THIS IS YOUR SCHEDULE"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,20 +158,24 @@
 
     <Button
         android:id="@+id/bn_back"
+        style="@style/CustomMaterialButton"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="16dp"
         android:text="back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/setAlarm"
+        style="@style/CustomMaterialButtonNoSize"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="16dp"
         android:text="set the alarm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -192,11 +197,11 @@
         android:id="@+id/bn_deleteEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="84dp"
         android:text="Delete event"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/setAlarm"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

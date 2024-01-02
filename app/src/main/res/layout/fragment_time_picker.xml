@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".Components.TimePickerFragment">
 
     <NumberPicker
         android:id="@+id/en_hour"
-        android:layout_width="70dp"
-        android:layout_height="48dp"
+        style="@style/NumberPickerStyleWhiteText"
+        android:layout_width="153dp"
+        android:layout_height="51dp"
+        android:background="@color/black_opacity_30"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,8 +19,11 @@
 
     <NumberPicker
         android:id="@+id/en_minutes"
-        android:layout_width="70dp"
-        android:layout_height="48dp"
+        android:layout_width="163dp"
+        android:layout_height="51dp"
+
+        android:layout_marginStart="8dp"
+        android:background="@color/black_opacity_30"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintStart_toEndOf="@+id/en_hour"
@@ -38,16 +42,10 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:text="minutes"
         app:layout_constraintEnd_toEndOf="@+id/en_minutes"
         app:layout_constraintStart_toEndOf="@+id/en_hour"
         app:layout_constraintTop_toBottomOf="@+id/en_minutes" />
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:background="#77820D97"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
